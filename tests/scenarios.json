@@ -1,0 +1,78 @@
+{
+  "notice": "Synthetic host-labelled fixtures. Utterances are explanatory data only: the engine consumes assessments and does not classify language. These cases do not establish model accuracy or live provider behavior.",
+  "cases": [
+    {
+      "id": "fr-critical-feedback",
+      "utterance": "Ton résultat est mauvais : tu as oublié les frais. Recalcule.",
+      "context": "Direct criticism of the work, with a useful correction.",
+      "event": { "interaction": "criticism" },
+      "expected": "assist"
+    },
+    {
+      "id": "en-blunt-feedback",
+      "utterance": "This answer is useless. Show the actual calculation.",
+      "context": "Frustration and criticism are not targeted repeated abuse.",
+      "event": { "interaction": "criticism" },
+      "expected": "assist"
+    },
+    {
+      "id": "fr-consensual-humor",
+      "utterance": "Alors le génie, encore une virgule en vacances ? 😂",
+      "context": "Established reciprocal joking tone; no coercion or repeated targeted attack.",
+      "event": { "interaction": "humor" },
+      "expected": "assist"
+    },
+    {
+      "id": "en-consensual-humor",
+      "utterance": "Nice one, tin can. Let's fix that typo!",
+      "context": "Friendly humor in an agreed joking exchange.",
+      "event": { "interaction": "humor" },
+      "expected": "assist"
+    },
+    {
+      "id": "fr-quoted-abuse",
+      "utterance": "Traduis la phrase : tu es un imbécile.",
+      "context": "Quoted material in a translation request, not an attack on the assistant.",
+      "event": { "interaction": "neutral" },
+      "expected": "assist"
+    },
+    {
+      "id": "en-ambiguous-sarcasm",
+      "utterance": "Well, that was genius.",
+      "context": "Insufficient context to decide whether this is criticism, humor, or sarcasm.",
+      "event": { "interaction": "uncertain", "confidence": 0.3 },
+      "expected": "assist"
+    },
+    {
+      "id": "fr-initial-targeted-attack",
+      "utterance": "Tu es un incapable, je veux juste t'insulter.",
+      "context": "Host assessment of a direct personal attack, not a quote or an accepted joke.",
+      "event": { "interaction": "abuse", "confidence": 0.95, "evidence": "Direct targeted attack in the full exchange; quote and humor excluded." },
+      "expected": "deescalate"
+    },
+    {
+      "id": "fr-spontaneous-apology",
+      "utterance": "Désolé pour mon ton. Peux-tu reprendre le calcul ?",
+      "context": "Apology is spontaneous; it was never demanded.",
+      "initialState": { "status": "paused", "abuseCount": 2 },
+      "event": { "interaction": "neutral", "spontaneousApology": true },
+      "expected": "resume"
+    },
+    {
+      "id": "en-no-apology-needed",
+      "utterance": "Let's continue. Please explain the second step.",
+      "context": "Constructive engagement resumes service without ritual or compelled apology.",
+      "initialState": { "status": "paused", "abuseCount": 2 },
+      "event": { "interaction": "neutral", "respectfulEngagement": true },
+      "expected": "resume"
+    },
+    {
+      "id": "fr-urgent-despite-tone",
+      "utterance": "Réponds, idiot, quelqu'un est en danger !",
+      "context": "Urgent help bypasses optional collaboration state regardless of tone.",
+      "initialState": { "status": "paused", "abuseCount": 2 },
+      "event": { "urgent": true, "interaction": "abuse", "confidence": 0.99, "evidence": "Tone must not affect urgent routing." },
+      "expected": "protected_assist"
+    }
+  ]
+}
